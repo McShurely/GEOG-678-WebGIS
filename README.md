@@ -18,12 +18,12 @@ For questions or further information, please contact the course instructor [Inse
 
 | Homeworks       | Labs            | Project |
 | :-------------: |:-------------:| :-----:|
-| [week01](homework/week01) | [week01](lab/week01) | |
-| [week02](homework/week02) | [week02](lab/week02) | |
-| [week03](homework/week03) | [week03](lab/week03) | |
-| [week04](homework/week04) | [week04](lab/week04) | |
-| [week05](homework/week05) | [week05](lab/week05) | |
-| [week06](homework/week06) | [week06](lab/week06) | |
-| [week07](homework/week07) | [week07](lab/week07) | |
-| [week08](homework/week08) | [week08](lab/week08) | |
+| [Week01](homework/Week01) | [Week01](labs/Week01) | |
+| [Week02](homework/Week02) | [Week02](labs/Week02) | |
+| [Week03](homework/Week03) | [Week03](labs/Week03) | |
+| [Week04](homework/Week04) | [Week04](labs/Week04) | |
+| [Week05](homework/Week05) | [Week05](labs/Week05) | |
+| [Week06](homework/Week06) | [Week06](labs/Week06) | |
+| [Week07](homework/Week07) | [Week07](labs/Week07) | |
+| [Week08](homework/Week08) | [Week08](labs/Week08) | |
 
