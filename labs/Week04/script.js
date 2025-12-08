@@ -15,7 +15,7 @@ function Run() {
         bottomRight: bottomRightPoint
     };
 
-    console.log("Bounding box computed for person@tamu.edu: ");
+    console.log("Bounding box computed for ericmc33@tamu.edu: ");
     console.log(boundingBox);
 }
 
