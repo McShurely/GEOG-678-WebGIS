@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Leaflet on Mobile</title>
+    <meta charset="utf-8" />
+    <!-- Mobile viewport settings - disable unwanted scaling -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin="" />
+
+    <style>
+        /* Reset body and html for fullscreen map */
+        body {
+            padding: 0;
+            margin: 0;
+        }
+        html, body, #map {
+            height: 100%;
+            width: 100vw;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+
+    <script>
+        // Initialize map - setView will be overridden by geolocation if available
+        var map = L.map('map').fitWorld();
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        // Handle successful location detection
+        function onLocationFound(e) {
+            var radius = e.accuracy;
+
+            // Add a marker at the detected location
+            L.marker(e.latlng).addTo(map)
+                .bindPopup("You are within " + radius + " meters from this point").openPopup();
+
+            // Add a circle showing the accuracy radius
+            L.circle(e.latlng, radius).addTo(map);
+        }
+
+        // Handle location error
+        function onLocationError(e) {
+            alert(e.message);
+        }
+
+        // Register event handlers
+        map.on('locationfound', onLocationFound);
+        map.on('locationerror', onLocationError);
+
+        // Attempt to locate the user with setView option
+        // maxZoom: 16 limits the zoom level when centering on location
+        map.locate({setView: true, maxZoom: 16});
+    </script>
+</body>
+</html>
