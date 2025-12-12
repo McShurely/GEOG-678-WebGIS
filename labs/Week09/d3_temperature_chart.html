@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>College Station Weekly Temperature - D3.js</title>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        h2 {
+            color: #666;
+            text-align: center;
+            font-weight: normal;
+        }
+        .chart-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .chart-section {
+            margin-bottom: 30px;
+        }
+        .chart-label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        #high-chart div {
+            font: 14px sans-serif;
+            background-color: #e74c3c;
+            padding: 5px;
+            margin: 2px;
+            color: white;
+            text-align: right;
+            border-radius: 3px;
+        }
+        #low-chart div {
+            font: 14px sans-serif;
+            background-color: #3498db;
+            padding: 5px;
+            margin: 2px;
+            color: white;
+            text-align: right;
+            border-radius: 3px;
+        }
+        .legend {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .legend span {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 5px 15px;
+            border-radius: 3px;
+            color: white;
+        }
+        .legend .high {
+            background-color: #e74c3c;
+        }
+        .legend .low {
+            background-color: #3498db;
+        }
+    </style>
+</head>
+<body>
+    <h1>College Station Weekly Temperature Forecast</h1>
+    <h2>D3.js Bar Chart Visualization</h2>
+
+    <div class="chart-container">
+        <div class="chart-section">
+            <div class="chart-label">High Temperatures (°F):</div>
+            <div id="high-chart"></div>
+        </div>
+
+        <div class="chart-section">
+            <div class="chart-label">Low Temperatures (°F):</div>
+            <div id="low-chart"></div>
+        </div>
+
+        <div class="legend">
+            <span class="high">High Temps</span>
+            <span class="low">Low Temps</span>
+        </div>
+    </div>
+
+    <script>
+        // College Station Weekly Temperature Data
+        var highTemps = [82, 81, 81, 70, 77, 78, 79, 80];
+        var lowTemps = [67, 59, 50, 47, 51, 60, 66, 66];
+        var days = ['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+        // Scale factor for bar width
+        var scale = 5;
+
+        // Create High Temperature Chart
+        d3.select("#high-chart")
+            .selectAll("div")
+            .data(highTemps)
+            .enter()
+            .append("div")
+            .style("width", function(d) { return (d * scale) + "px"; })
+            .text(function(d, i) { return days[i] + ": " + d + "°F"; });
+
+        // Create Low Temperature Chart
+        d3.select("#low-chart")
+            .selectAll("div")
+            .data(lowTemps)
+            .enter()
+            .append("div")
+            .style("width", function(d) { return (d * scale) + "px"; })
+            .text(function(d, i) { return days[i] + ": " + d + "°F"; });
+    </script>
+</body>
+</html>
