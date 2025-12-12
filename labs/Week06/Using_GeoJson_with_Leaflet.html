@@ -1,7 +1,293 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using GeoJSON with Leaflet</title>
 
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""/>
 
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: #333;
+        }
+        #map {
+            width: 100%;
+            height: 500px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+        }
+        .info {
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <h1>Using GeoJSON with Leaflet</h1>
+    <p>This example demonstrates various GeoJSON features including points, lines, polygons, styling, popups, and filtering.</p>
 
+    <div id="map"></div>
 
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
 
+    <script>
+        // Initialize the map centered on the United States
+        const map = L.map('map').setView([39.5, -98.35], 4);
+
+        // Add OpenStreetMap tile layer
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        // ==========================================
+        // 1. Basic GeoJSON Point Feature
+        // ==========================================
+        const geojsonFeature = {
+            "type": "Feature",
+            "properties": {
+                "name": "Coors Field",
+                "amenity": "Baseball Stadium",
+                "popupContent": "This is where the Rockies play!"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-104.99404, 39.75621]
+            }
+        };
+
+        // ==========================================
+        // 2. Line Features with Custom Style
+        // ==========================================
+        const myLines = [
+            {
+                "type": "LineString",
+                "coordinates": [[-100, 40], [-105, 45], [-110, 55]]
+            },
+            {
+                "type": "LineString",
+                "coordinates": [[-105, 40], [-110, 45], [-115, 55]]
+            }
+        ];
+
+        const lineStyle = {
+            "color": "#ff7800",
+            "weight": 5,
+            "opacity": 0.65
+        };
+
+        // Add lines with custom style
+        L.geoJSON(myLines, {
+            style: lineStyle
+        }).addTo(map);
+
+        // ==========================================
+        // 3. Polygon Features with Dynamic Styling
+        // ==========================================
+        const states = [
+            {
+                "type": "Feature",
+                "properties": {"party": "Republican"},
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [-104.05, 48.99],
+                        [-97.22, 48.98],
+                        [-96.58, 45.94],
+                        [-104.03, 45.94],
+                        [-104.05, 48.99]
+                    ]]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {"party": "Democrat"},
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [-109.05, 41.00],
+                        [-102.06, 40.99],
+                        [-102.03, 36.99],
+                        [-109.04, 36.99],
+                        [-109.05, 41.00]
+                    ]]
+                }
+            }
+        ];
+
+        // Style polygons based on properties
+        L.geoJSON(states, {
+            style: function(feature) {
+                switch (feature.properties.party) {
+                    case 'Republican': return {color: "#ff0000", fillColor: "#ff0000", fillOpacity: 0.5};
+                    case 'Democrat': return {color: "#0000ff", fillColor: "#0000ff", fillOpacity: 0.5};
+                }
+            }
+        }).addTo(map);
+
+        // ==========================================
+        // 4. Point Features with Custom Markers (pointToLayer)
+        // ==========================================
+        const geojsonMarkerOptions = {
+            radius: 8,
+            fillColor: "#ff7800",
+            color: "#000",
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.8
+        };
+
+        // Add the point feature with custom circle marker
+        L.geoJSON(geojsonFeature, {
+            pointToLayer: function(feature, latlng) {
+                return L.circleMarker(latlng, geojsonMarkerOptions);
+            }
+        }).addTo(map);
+
+        // ==========================================
+        // 5. Adding Popups with onEachFeature
+        // ==========================================
+        function onEachFeature(feature, layer) {
+            if (feature.properties && feature.properties.popupContent) {
+                layer.bindPopup(feature.properties.popupContent);
+            }
+        }
+
+        // Additional features with popups
+        const placesOfInterest = {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "name": "Statue of Liberty",
+                        "popupContent": "<strong>Statue of Liberty</strong><br>A gift from France, dedicated in 1886."
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [-74.0445, 40.6892]
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "name": "Golden Gate Bridge",
+                        "popupContent": "<strong>Golden Gate Bridge</strong><br>Iconic suspension bridge in San Francisco."
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [-122.4783, 37.8199]
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "name": "Space Needle",
+                        "popupContent": "<strong>Space Needle</strong><br>Built for the 1962 World's Fair in Seattle."
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [-122.3493, 47.6205]
+                    }
+                }
+            ]
+        };
+
+        // Add places with popups and custom markers
+        L.geoJSON(placesOfInterest, {
+            pointToLayer: function(feature, latlng) {
+                return L.circleMarker(latlng, {
+                    radius: 10,
+                    fillColor: "#2ecc71",
+                    color: "#27ae60",
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.7
+                });
+            },
+            onEachFeature: onEachFeature
+        }).addTo(map);
+
+        // ==========================================
+        // 6. Filtering Features
+        // ==========================================
+        const someFeatures = [
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Coors Field",
+                    "show_on_map": true,
+                    "popupContent": "Coors Field - Shown because show_on_map is true"
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [-104.99404, 39.75621]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Busch Field",
+                    "show_on_map": false,
+                    "popupContent": "Busch Field - This won't show!"
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [-90.1934, 38.6226]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Fenway Park",
+                    "show_on_map": true,
+                    "popupContent": "Fenway Park - Home of the Red Sox!"
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [-71.0972, 42.3467]
+                }
+            }
+        ];
+
+        // Add filtered features (only those with show_on_map: true)
+        L.geoJSON(someFeatures, {
+            filter: function(feature, layer) {
+                return feature.properties.show_on_map;
+            },
+            pointToLayer: function(feature, latlng) {
+                return L.circleMarker(latlng, {
+                    radius: 12,
+                    fillColor: "#9b59b6",
+                    color: "#8e44ad",
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.7
+                });
+            },
+            onEachFeature: onEachFeature
+        }).addTo(map);
+
+        // ==========================================
+        // 7. Adding a regular marker with popup for reference
+        // ==========================================
+        L.marker([39.75621, -104.99404]).addTo(map)
+            .bindPopup('<strong>Coors Field</strong><br>This is where the Rockies play!')
+            .openPopup();
+    </script>
+</body>
 </html>
